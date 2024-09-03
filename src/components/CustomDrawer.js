@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useState, useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -13,14 +15,14 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import  clearTokens  from '@/utility/clearTokens';
 
 const CustomDrawer = ({ isDrawerOpen, handleDrawerToggle }) => {
     const drawerWidth = 280;
     const router = useRouter();
     const theme = useTheme();
-    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); // Check if the screen size is small
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
     const [isLoggedIn, setIsLoggedIn] = useState(true);
-
 
     useEffect(() => {
         const loggedInStatus = localStorage.getItem('isLoggedIn') === 'true';
@@ -32,6 +34,7 @@ const CustomDrawer = ({ isDrawerOpen, handleDrawerToggle }) => {
     };
 
     const handleLogoutClick = () => {
+        clearTokens();
         setIsLoggedIn(false);
         localStorage.setItem('isLoggedIn', 'false');
         router.push('/');

@@ -15,12 +15,11 @@ import PersonalInfo from './PersonalInfo';
 import CustomDrawer from './CustomDrawer';
 import ProfileHeader from './ProfileHeader';
 import TabsNavigation from './TabsNavigation';
-import { useRouter } from 'next/navigation';
 import EditProfileModal from './EditProfileModal';
 import { fetchProfileData } from '@/services/profileService';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from '@mui/material/Skeleton';
+import { useRouter } from 'next/navigation';
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('personal');
@@ -31,7 +30,7 @@ const Profile = () => {
     const router = useRouter();
 
     useEffect(() => {
-        const accessToken = localStorage.getItem('accessToken');
+        const accessToken = localStorage.getItem('access_token');
         const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
 
         if (!isLoggedIn || !accessToken) {
@@ -41,11 +40,11 @@ const Profile = () => {
 
         const loadProfileData = async () => {
             try {
-                const data = await fetchProfileData(accessToken);
+                const data = await fetchProfileData();
                 setProfileData(data);
-                console.log("user data", data)
             } catch (error) {
-                toast.error('Failed to load profile data.');
+                toast.error('Failed to load profile data. Please log in again.');
+                router.push('/');
             } finally {
                 setLoading(false);
             }
@@ -122,7 +121,7 @@ const Profile = () => {
                     <ProfileHeader userData={profileData} />
 
                     {/* Hidden on small screens */}
-                    <button className="hidden sm:flex bg-black text-white py-2 px-4 rounded-lg items-center " onClick={handleEditClick}>
+                    <button className="hidden sm:flex bg-black text-white py-2 px-4 rounded-lg items-center" onClick={handleEditClick}>
                         <FontAwesomeIcon icon={faEdit} className="mr-2" />
                         Edit Profile
                     </button>

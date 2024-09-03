@@ -1,3 +1,5 @@
+import setTokens from "@/utility/setTokens";
+
 export const login = async (email, password) => {
   try {
     const response = await fetch('https://cyparta-backend-gf7qm.ondigitalocean.app/api/login/', {
@@ -8,11 +10,11 @@ export const login = async (email, password) => {
       body: JSON.stringify({ email, password }),
     });
 
-    if (response.status === 200) { 
+    if (response.status === 200) {
       const data = await response.json();
-      
-      localStorage.setItem('access_token', data.access);
-      localStorage.setItem('refresh_token', data.refresh);
+
+      // Save tokens to localStorage
+      setTokens(data.access, data.refresh);
 
       return data;
     } else {

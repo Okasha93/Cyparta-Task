@@ -1,3 +1,5 @@
+import clearTokens from "@/utility/clearTokens";
+
 export const refreshToken = async () => {
     try {
         const refresh = localStorage.getItem('refresh_token');
@@ -14,12 +16,15 @@ export const refreshToken = async () => {
         }
 
         const data = await response.json();
+
+        // Save the new access token
         localStorage.setItem('access_token', data.access);
         return data.access;
     } catch (error) {
         console.error('Error refreshing token:', error);
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
+
+        // Clear tokens on failure
+        clearTokens();
         throw error;
     }
 };

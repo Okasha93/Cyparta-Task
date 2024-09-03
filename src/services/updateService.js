@@ -4,11 +4,12 @@ import { refreshToken } from './refreshToken';
 export const updateUserProfile = async (formData, token) => {
     try {
         const response = await axios.put(
-            'https://cyparta-backend-gf7qm.ondigitalocean.app/api/profile/', 
-            formData, 
+            'https://cyparta-backend-gf7qm.ondigitalocean.app/api/profile/',
+            formData,
             {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
                 }
             }
         );
@@ -19,9 +20,10 @@ export const updateUserProfile = async (formData, token) => {
             if (newToken) {
                 return updateUserProfile(formData, newToken);
             } else {
-                throw new Error('Token refresh failed');
+                throw new Error('Token refresh failed. Please log in again.');
             }
         }
+        console.error('Error updating profile:', error);
         throw error;
     }
 };
