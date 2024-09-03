@@ -2,8 +2,8 @@ import "./globals.css";
 import Login from "@/components/Login";
 
 export const metadata = {
-  title: "Task Master",
-  description: "Manage your Company tasks",
+  title: "Cyparta",
+  description: "Cyparta Task",
 };
 
 const HomePage = () => <Login/>

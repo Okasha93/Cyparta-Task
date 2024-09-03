@@ -6,28 +6,41 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { login } from '@/services/authService'; // Adjust the path as needed
+import CustomDrawer from './CustomDrawer';
+import { useRouter } from 'next/navigation';
+import { login } from '@/services/authService';
+
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const router = useRouter();
+
   const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
       const data = await login(email, password);
-      console.log('Login successful:', data);
-      toast.success('Login successful!');
-      // Redirect to the profile page or handle the login success as needed
+      if (data) {
+        // Assuming that you get the tokens in data.refresh and data.access
+        localStorage.setItem('refreshToken', data.refresh);
+        localStorage.setItem('accessToken', data.access);
+        localStorage.setItem('isLoggedIn', 'true');
+        toast.success('Login successful!');
+        router.push('/profile');
+      } else {
+        throw new Error('Login failed. Please check your credentials.');
+      }
     } catch (err) {
-      toast.error('Login failed. Please check your credentials.');
+      toast.error(err.message || 'Login failed. Please check your credentials.');
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen" style={{ backgroundColor: '#E9E9E9' }}>
+      <CustomDrawer />
       <div className="w-full max-w-lg">
         <div className="flex justify-center mb-6">
           <Image src="/logo.png" alt="Cyparta Logo" width={300} height={100} />
