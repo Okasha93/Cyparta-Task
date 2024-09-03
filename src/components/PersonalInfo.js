@@ -1,5 +1,4 @@
 import Divider from '@mui/material/Divider';
-import Image from 'next/image';
 
 const PersonalInfo = ({ userData }) => {
     return (
