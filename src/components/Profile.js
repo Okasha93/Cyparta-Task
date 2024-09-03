@@ -18,6 +18,7 @@ import TabsNavigation from './TabsNavigation';
 import EditProfileModal from './EditProfileModal';
 import { fetchProfileData } from '@/services/profileService';
 import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from '@mui/material/Skeleton';
 import { useRouter } from 'next/navigation';
 
