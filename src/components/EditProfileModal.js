@@ -1,10 +1,13 @@
-"use client"
+"use client";
 
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from '@mui/material';
 import { styled } from '@mui/system';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { updateUserProfile } from '@/services/updateService';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const StyledDialogContent = styled(DialogContent)({
     display: 'grid',
@@ -42,6 +45,29 @@ const SaveButton = styled(StyledButton)({
     },
 });
 
+const StyledDatePicker = styled(DatePicker)({
+    width: '100%',
+    height: 57,
+    padding: '12px',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
+    backgroundColor: '#E9E9E9',
+    boxSizing: 'border-box',
+    fontSize: '16px',
+    color: '#000',
+    '&:focus': {
+        borderColor: '#000',
+        outline: 'none',
+    },
+});
+
+const DatePickerContainer = styled('div')({
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    paddingTop: 7,
+});
+
 const EditProfileModal = ({ open, onClose, userData, onSave }) => {
     const [formData, setFormData] = useState({ ...userData });
     const [isSaving, setIsSaving] = useState(false);
@@ -49,6 +75,10 @@ const EditProfileModal = ({ open, onClose, userData, onSave }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+    };
+
+    const handleDateChange = (date) => {
+        setFormData({ ...formData, date_joined: date.toISOString().split('T')[0] });
     };
 
     const handleSave = async () => {
@@ -79,7 +109,6 @@ const EditProfileModal = ({ open, onClose, userData, onSave }) => {
             setIsSaving(false);
         }
     };
-    
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="md" sx={{
@@ -112,6 +141,7 @@ const EditProfileModal = ({ open, onClose, userData, onSave }) => {
                     value={formData.phone}
                     onChange={handleChange}
                     fullWidth
+                    disabled
                 />
                 <TextField
                     margin="dense"
@@ -120,15 +150,25 @@ const EditProfileModal = ({ open, onClose, userData, onSave }) => {
                     value={formData.email}
                     onChange={handleChange}
                     fullWidth
+                    disabled
                 />
-                <TextField
-                    margin="dense"
-                    label="Date of Birth"
-                    name="date_joined"
-                    value={formData.date_joined}
-                    onChange={handleChange}
-                    fullWidth
-                />
+                {/* <div>
+                    <label className="block text-sm text-gray-700 mb-2">Date of Birth</label>
+                    <DatePicker
+                        selected={new Date(formData.date_joined)}
+                        onChange={handleDateChange}
+                        dateFormat="yyyy-MM-dd"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-black text-black"
+                    />
+                </div> */}
+                <DatePickerContainer>
+                    {/* <label className="text-sm text-gray-700 mb-2">Date of Birth</label> */}
+                    <StyledDatePicker
+                        selected={new Date(formData.date_joined)}
+                        onChange={handleDateChange}
+                        dateFormat="yyyy-MM-dd"
+                    />
+                </DatePickerContainer>
                 <TextField
                     margin="dense"
                     label="Bio"
